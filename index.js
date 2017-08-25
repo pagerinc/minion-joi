@@ -2,21 +2,33 @@
 
 const joi = require('joi')
 
-module.exports = (schema, options = {}) => (handler) => (payload) => {
+module.exports = (schema, options = {}) => {
+
     if (!schema) {
         throw Error('joi schema required.')
     }
 
-    if (!handler || typeof handler !== 'function') {
-        throw Error('a function is required.')
+    const createHandler = (handler) => (payload) => {
+
+        const {error, value: message} = joi.validate(payload, schema)
+
+        if (error) {
+            error.requeue = !!options.requeue
+            throw error
+        }
+
+        return handler(message)
     }
 
-    const {error, value: message} = joi.validate(payload, schema)
+    return (handler) => {
 
-    if (error) {
-        error.requeue = !!options.requeue
-        throw error
+        if (!handler || typeof handler !== 'function') {
+            throw Error('a function is required.')
+        }
+
+        const validatedHandler = createHandler(handler)
+        validatedHandler.settings = handler.settings
+
+        return validatedHandler
     }
-
-    return handler(message)
 }

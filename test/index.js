@@ -79,3 +79,21 @@ test('handler with invalid message and requeing', async t => {
     t.true(error.isJoi)
     t.true(error.requeue)
 })
+
+test('handler keeps settings after wrapped', async t => {
+    const handler = ({name}) => {
+        return `Hello ${name}`
+    }
+
+    handler.settings = {
+        key: 'handler.key'
+    }
+
+    const validate = validation(joi.object({
+        name: joi.string()
+    }))
+
+    const newHandler = validate(handler)
+
+    t.deepEqual(newHandler.settings, handler.settings)
+})
