@@ -1,0 +1,32 @@
+{
+  "name": "@pager/minion-joi",
+  "version": "1.0.0",
+  "description": "Joi validation for pager/minion workers",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pagerinc/minion-joi.git"
+  },
+  "keywords": [
+    "microservices",
+    "rabbitmq",
+    "workers",
+    "json"
+  ],
+  "author": "gmauricio.munoz@gmail.com, david.roncancio@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pagerinc/minion-joi/issues"
+  },
+  "homepage": "https://github.com/pagerinc/minion#readme",
+  "dependencies": {
+    "joi": "^10.6.0"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "nyc": "^11.1.0"
+  }
+}
