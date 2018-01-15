@@ -10,10 +10,9 @@ module.exports = (schema, options = {}) => {
 
     const createHandler = (handler) => (payload) => {
 
-        const {error, value: message} = joi.validate(payload, schema)
+        const {error, value: message} = joi.validate(payload, schema, options)
 
         if (error) {
-            error.requeue = !!options.requeue
             throw error
         }
 

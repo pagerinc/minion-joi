@@ -60,24 +60,20 @@ test('handler with invalid message', async t => {
 	}, Error);
 
     t.true(error.isJoi)
-    t.false(error.requeue)
 })
 
-test('handler with invalid message and requeing', async t => {
-    const handler = ({name}) => {
-      return `Hello ${name}`
-    }
+test('handler with invalid message and joi options', async t => {
+    const handler = async ({name}) => {
+        return Promise.resolve(`Hello ${name}`)
+      }
 
-    const validate = validation(joi.object({
-        name: joi.string()
-    }), { requeue: true })
+      const validate = validation(joi.object({
+          name: joi.string()
+      }), { stripUnknown: true })
 
-    const error = t.throws(() => {
-		validate(handler)(0)
-	}, Error);
+      const res = await validate(handler)({ name: 'World', salute: 'hello' })
 
-    t.true(error.isJoi)
-    t.true(error.requeue)
+      t.is(res, 'Hello World')
 })
 
 test('handler keeps settings after wrapped', async t => {
